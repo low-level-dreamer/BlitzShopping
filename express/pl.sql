@@ -138,3 +138,12 @@ BEGIN
 END //
 
 DELIMITER ;
+DELIMITER //
+DROP PROCEDURE IF EXISTS update_product;
+
+CREATE PROCEDURE update_product()
+BEGIN
+    SELECT * FROM Products
+
+END //
+DELIMITER ;
