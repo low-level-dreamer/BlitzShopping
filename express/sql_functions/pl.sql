@@ -1,3 +1,6 @@
+-- Prompt - "How should I create a procedure to refresh tables back to original state"
+-- Prompt - "Generate me an outline of a PL SQL procedure to update a table that also updates its intersection table"
+
 DELIMITER //
 -- Procedure to reset database to original state
 
@@ -96,9 +99,9 @@ DELIMITER ;
 DELIMITER //
 
 -- Procedure for updating product as well as the intersection table
-DROP PROCEDURE IF EXISTS update_product_and_sales_link;
+DROP PROCEDURE IF EXISTS update_product;
 
-CREATE PROCEDURE update_product_and_sales_link(
+CREATE PROCEDURE update_product(
     IN in_productID INT,
     IN in_sku VARCHAR(45),
     IN in_productName VARCHAR(300),
