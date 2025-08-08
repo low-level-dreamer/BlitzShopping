@@ -8,7 +8,6 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
   useEffect(() => {
     fetchProducts();
   }, []);
-
   const fetchProducts = async () => {
     try {
       setLoading(true);
@@ -52,7 +51,7 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
   // Main render
   return (
     <div>
-      <h1>Products</h1>
+      <h1>{tableName}</h1>
      
       <div>
         <table>
@@ -95,12 +94,12 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
       >
         Refresh Page
       </button>
-      <button
+      {/* <button
         onClick={ResetDB}
         className="update-button"
       >
         Reset Data
-      </button>
+      </button> */}
     </div>
   );
 };

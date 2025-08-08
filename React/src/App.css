@@ -66,11 +66,17 @@
 }
 
 /* Table Styles */
-.data-table {
+table{
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #ddd;
+  border: 5px solid #333;
 }
+td{
+  
+  border-collapse: collapse;
+  border: 3px solid #333;
+}
+
 
 .table-header {
   background-color: #f8f9fa;

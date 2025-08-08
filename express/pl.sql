@@ -62,26 +62,48 @@ DELIMITER ;
 -- Get Sales entries
 DELIMITER //
 
-DROP PROCEDURE IF EXISTS get_sales;
+-- DROP PROCEDURE IF EXISTS get_sales;
 
+-- CREATE PROCEDURE get_sales()
+-- BEGIN
+--     SELECT
+--         s.salesID,
+--         s.dateOfSale,
+--         GROUP_CONCAT(sp.sku ORDER BY sp.sku SEPARATOR ', ') as skuList,
+--         GROUP_CONCAT(p.productName ORDER BY sp.sku SEPARATOR ', ') as productNames,
+--         l.courierName,
+--         SUM(p.price) as totalPrice,
+--         s.address,
+--         SUM(p.volume) as totalVolume,
+--         SUM(p.weight) as totalWeight,
+--         COUNT(sp.sku) as productCount
+--     FROM Sales s
+--     LEFT JOIN SalesProducts sp ON s.salesID = sp.salesID
+--     LEFT JOIN Products p ON sp.sku = p.sku
+--     LEFT JOIN Logistics l ON l.courierID = s.courierID
+--     GROUP BY s.salesID, s.dateOfSale, l.courierName, s.address;
+-- END //
+-- DELIMITER ;
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS get_sales;
 CREATE PROCEDURE get_sales()
 BEGIN
     SELECT
         s.salesID,
         s.dateOfSale,
-        GROUP_CONCAT(sp.sku ORDER BY sp.sku SEPARATOR ', ') as skuList,
-        GROUP_CONCAT(p.productName ORDER BY sp.sku SEPARATOR ', ') as productNames,
+        sp.sku,
+        p.productName,
         l.courierName,
-        SUM(p.price) as totalPrice,
+        p.price,
         s.address,
-        SUM(p.volume) as totalVolume,
-        SUM(p.weight) as totalWeight,
-        COUNT(sp.sku) as productCount
+        p.volume,
+        p.weight
     FROM Sales s
     LEFT JOIN SalesProducts sp ON s.salesID = sp.salesID
     LEFT JOIN Products p ON sp.sku = p.sku
     LEFT JOIN Logistics l ON l.courierID = s.courierID
-    GROUP BY s.salesID, s.dateOfSale, l.courierName, s.address;
+    ORDER BY s.salesID, sp.sku;
 END //
 DELIMITER ;
 

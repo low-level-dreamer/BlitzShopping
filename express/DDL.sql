@@ -21,7 +21,9 @@ CREATE TABLE Logistics (
 DROP TABLE IF EXISTS salesProducts;
 CREATE TABLE salesProducts (
     salesID int NOT NULL,
-    sku varchar(20) NOT NULL
+    sku varchar(20) NOT NULL,
+    FOREIGN KEY (salesID) REFERENCES Sales(salesID) ON DELETE CASCADE,
+    FOREIGN KEY (sku) REFERENCES Products(sku) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS Products;
@@ -47,8 +49,8 @@ CREATE TABLE Sales (
     orderAmount decimal(18,2) NOT NULL,
     orderStatus enum('Pending', 'Shipped', 'Delivered', 'Canceled') NOT NULL,
     PRIMARY KEY (salesID),
-    FOREIGN KEY (courierID) REFERENCES Logistics(courierID),
-    FOREIGN KEY (customerID) REFERENCES Customers(customerID)
+    FOREIGN KEY (courierID) REFERENCES Logistics(courierID) ON DELETE CASCADE,
+    FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE
 );
 
 -- # Citation for the following queries:

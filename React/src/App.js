@@ -1,10 +1,44 @@
 import React, { useState } from 'react';
 import './App.css'
 import GetTable from './table';
-import {ResetDB,DeleteProduct} from './cud'
+import {ResetDB,DeleteProduct,AddProduct} from './cud'
 const App = () => {
   const [currentPage, setCurrentPage] = useState('Home');
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [formData, setFormData] = useState({
+    sku: '',
+    productName: '',
+    productDesc: '',
+    price: '',
+    category: '',
+    volume: '',
+    weight: ''
+  });
+   const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
+ const handleAddProduct = async () => {
+    const success = await AddProduct(formData);
+    
+    if (success) {
+      // Clear the form after successful submission
+      setFormData({
+        sku: '',
+        productName: '',
+        productDesc: '',
+        price: '',
+        category: '',
+        volume: '',
+        weight: ''
+      });
+      setRefreshTrigger(prev => prev + 1)
+    }
+  };
   const renderNavigation = () => (
     <nav className="navigation">
       <div className="nav-container">
@@ -65,23 +99,67 @@ const App = () => {
       <h2>Products</h2>
       
       <div className="form-container">
-        <input type="text" placeholder="SKU" className="form-input" />
-        <input type="text" placeholder="Product Name" className="form-input" />
-        <input type="text" placeholder="Description" className="form-input" />
-        <input type="number" placeholder="Price" className="form-input" />
-        <select className="form-select">
-          <option>Clothing</option>
-          <option>Electronics</option>
-          <option>Accesories</option>
-          <option>Software</option>
-        </select>
-        <input type="number" placeholder="Volume" className="form-input" />
-        <input type="number" placeholder="Weight" className="form-input" />
-        <button className="add-button">Add</button>
+         <input 
+          type="text" 
+          name="sku" 
+          placeholder="SKU" 
+          className="form-input" 
+          value={formData.sku}
+          onChange={handleInputChange}
+        />
+        <input 
+          type="text" 
+          name="productName" 
+          placeholder="Product Name" 
+          className="form-input" 
+          value={formData.productName}
+          onChange={handleInputChange}
+        />
+        <input 
+          type="text" 
+          name="productDesc" 
+          placeholder="Description" 
+          className="form-input" 
+          value={formData.productDesc}
+          onChange={handleInputChange}
+        />
+        <input 
+          type="number" 
+          name="price" 
+          placeholder="Price" 
+          className="form-input" 
+          value={formData.price}
+          onChange={handleInputChange}
+        />
+        <input 
+          type="text" 
+          name="category" 
+          placeholder="Category" 
+          className="form-input" 
+          value={formData.category}
+          onChange={handleInputChange}
+        />
+        <input 
+          type="number" 
+          name="volume" 
+          placeholder="Volume" 
+          className="form-input" 
+          value={formData.volume}
+          onChange={handleInputChange}
+        />
+        <input 
+          type="number" 
+          name="weight" 
+          placeholder="Weight" 
+          className="form-input" 
+          value={formData.weight}
+          onChange={handleInputChange}
+        />
+        <button className="add-button" onClick={handleAddProduct}>Add</button>
       </div>
       <div>
       <GetTable 
-        key="products-table"
+        key={`products-table-${refreshTrigger}`}
         tableName="Products"
         headers={["sku","Product Name", "Product Description", "Price","Category","Volume", "Weight"]}
         apiEndpoint="/api/get"
@@ -144,30 +222,32 @@ const App = () => {
   );
 const renderSalesProduct = () => (
     <div className="page-container">
-      <h2>Sales</h2>
+      <h2>Sales Products</h2>
       
       <div className="form-container">
-        <input type="number" placeholder="Customer ID" className="form-input" />
-        <input type="text" placeholder="Address" className="form-input" />
-        <input type="text" placeholder="Country" className="form-input" />
-        <input type="number" placeholder="Courier ID" className="form-input" />
+        <input type="number" placeholder="Sales ID" className="form-input" />
+        <input type="text" placeholder="SKU" className="form-input" />
         <select className="form-select">
-          <option>Pending</option>
-          <option>Shipped</option>
-          <option>Delivered</option>
-          <option>Canceled</option>
+          <option>Sales ID</option>
+          <option>Customer ID</option>
         </select>
         <button className="add-button">Add</button>
       </div>
 
       <div>
-      <GetTable 
+        <GetTable 
+        key="salesproduct-table"
+        tableName="SalesProducts"
+        headers={["Sales ID","SKU"]}
+        apiEndpoint="/api/get"
+        port={9015}/>
+      {/* <GetTable 
         key="salesproduct-table"
         tableName="SalesProducts"
         headers={["Sales ID","Date of Sale","SKUs","Product Names","Courier Name","Total Price","Address", "Total Volume", "Total Weight"]}
         apiEndpoint="/api/get-sales"
         port={9015}
-      />
+      /> */}
       </div>
     </div>
   );
