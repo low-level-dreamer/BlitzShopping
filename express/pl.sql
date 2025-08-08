@@ -61,10 +61,12 @@ END //
 DELIMITER ;
 -- Get Sales entries
 DELIMITER //
+
 DROP PROCEDURE IF EXISTS get_sales;
 
-CREATE PROCEDURE get_sales(
-    SELECT 
+CREATE PROCEDURE get_sales()
+BEGIN
+    SELECT
         s.salesID,
         s.dateOfSale,
         GROUP_CONCAT(sp.sku ORDER BY sp.sku SEPARATOR ', ') as skuList,
@@ -80,7 +82,7 @@ CREATE PROCEDURE get_sales(
     LEFT JOIN Products p ON sp.sku = p.sku
     LEFT JOIN Logistics l ON l.courierID = s.courierID
     GROUP BY s.salesID, s.dateOfSale, l.courierName, s.address;
-);
+END //
 DELIMITER ;
 
 DELIMITER //
@@ -110,11 +112,11 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS delete_product;
 
 CREATE PROCEDURE delete_product(
-    IN in_productID INT
+    IN in_sku INT
 )
 BEGIN
     DELETE FROM Products
-    WHERE productID = in_productID;
+    WHERE sku = in_sku;
 END //
 
 DELIMITER ;
@@ -140,7 +142,7 @@ BEGIN
     -- Hold the current sku value in a separate variable
     SELECT sku INTO old_sku
     FROM Products
-    WHERE productID = in_productID;
+    WHERE sku = in_productID;
 
     UPDATE Products
     SET
@@ -151,7 +153,7 @@ BEGIN
         category = in_category,
         volume = in_volume,
         weight = in_weight
-    WHERE productID = in_productID;
+    WHERE sku = in_productID;
 
     UPDATE SalesProducts
     SET sku = in_sku
