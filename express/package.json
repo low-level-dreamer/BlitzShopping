@@ -7,10 +7,10 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "watch": "nodemon server.js",
-    "production": "forever start server.js",
-    "stop": "forever stop server.js",
-    "list": "forever list",
-    "logs": "forever logs server.js"
+    "production": "npx forever start server.js",
+    "stop": "npx forever stop server.js",
+    "list": "npx forever list",
+    "logs": "npx forever logs server.js"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

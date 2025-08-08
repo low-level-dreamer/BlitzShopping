@@ -3,12 +3,19 @@
 
 const express = require('express');
 const app = express();
+// Citation Here Claude AI fixed the CORS problem
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 const db = require('./database/db-connector');
 
-const PORT = 3000;
+const PORT = 9015;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
 });
@@ -32,7 +39,7 @@ app.get('/test-db', async (req, res) => {
 });
 
 //Get data from table, query: table
-app.get('/get'), async function(req,res){
+app.get('/api/get', async function(req,res){
   try {
     const table_name=req.query.table
     const [rows] = await db.execute(`SELECT * FROM ${table_name};`);
@@ -42,10 +49,21 @@ app.get('/get'), async function(req,res){
       console.error('Error:', error);
       res.status(500).json({ error: 'Server error' });
   }
-}
+})
+app.get('/api/get-sales', async function(req,res){
+  try {
+    const [rows] = await db.execute(`CALL get_sales();`);
+    const data = rows[0].map(row => Object.values(row));
+
+    res.json(data);
+  }catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Server error' });
+  }
+})
 
 // Refresh Data
-app.post('/Home/Refresh', async function (req, res) {
+app.post('/api/Refresh', async function (req, res) {
   try {
     const refresh_data = 'CALL refresh_data();'
     await db.query(refresh_data)
