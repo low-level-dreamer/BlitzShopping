@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {ResetDB,DeleteProduct} from './cud'
+
 const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
