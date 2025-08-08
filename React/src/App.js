@@ -1,3 +1,5 @@
+// Claude was used to debug the original code written by our team.
+
 import React, { useState } from 'react';
 import './App.css'
 import GetTable from './table';
