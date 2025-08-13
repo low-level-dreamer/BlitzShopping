@@ -149,7 +149,6 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS update_product;
 
 CREATE PROCEDURE update_product(
-    IN in_productID INT,
     IN in_sku VARCHAR(45),
     IN in_productName VARCHAR(300),
     IN in_productDesc TEXT,
@@ -164,7 +163,7 @@ BEGIN
     -- Hold the current sku value in a separate variable
     SELECT sku INTO old_sku
     FROM Products
-    WHERE sku = in_productID;
+    WHERE sku = in_sku;
 
     UPDATE Products
     SET
@@ -175,7 +174,7 @@ BEGIN
         category = in_category,
         volume = in_volume,
         weight = in_weight
-    WHERE sku = in_productID;
+    WHERE sku = in_sku;
 
     UPDATE SalesProducts
     SET sku = in_sku
