@@ -1,3 +1,5 @@
+// Claude was used to debug the original code written by our team.
+
 import React, { useState, useEffect } from 'react';
 
 const ResetDB=async ()=>{

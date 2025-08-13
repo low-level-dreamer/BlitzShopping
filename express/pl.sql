@@ -1,3 +1,7 @@
+-- # Citation for the following queries:
+-- # Date: 08/06/2025
+-- # Adapted from ChatGPT
+-- # Source URL: https://chatgpt.com/
 -- Prompt - "How should I create a procedure to refresh tables back to original state"
 -- Prompt - "Generate me an outline of a PL SQL procedure to update a table that also updates its intersection table"
 
@@ -62,28 +66,6 @@ DELIMITER ;
 -- Get Sales entries
 DELIMITER //
 
--- DROP PROCEDURE IF EXISTS get_sales;
-
--- CREATE PROCEDURE get_sales()
--- BEGIN
---     SELECT
---         s.salesID,
---         s.dateOfSale,
---         GROUP_CONCAT(sp.sku ORDER BY sp.sku SEPARATOR ', ') as skuList,
---         GROUP_CONCAT(p.productName ORDER BY sp.sku SEPARATOR ', ') as productNames,
---         l.courierName,
---         SUM(p.price) as totalPrice,
---         s.address,
---         SUM(p.volume) as totalVolume,
---         SUM(p.weight) as totalWeight,
---         COUNT(sp.sku) as productCount
---     FROM Sales s
---     LEFT JOIN SalesProducts sp ON s.salesID = sp.salesID
---     LEFT JOIN Products p ON sp.sku = p.sku
---     LEFT JOIN Logistics l ON l.courierID = s.courierID
---     GROUP BY s.salesID, s.dateOfSale, l.courierName, s.address;
--- END //
--- DELIMITER ;
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS get_sales;
@@ -129,12 +111,13 @@ END //
 DELIMITER ;
 
 DELIMITER //
+
 -- Procedure to delete product
 
 DROP PROCEDURE IF EXISTS delete_product;
 
 CREATE PROCEDURE delete_product(
-    IN in_sku INT
+    IN in_sku VARCHAR(45)
 )
 BEGIN
     DELETE FROM Products
@@ -163,7 +146,11 @@ BEGIN
     -- Hold the current sku value in a separate variable
     SELECT sku INTO old_sku
     FROM Products
+<<<<<<< HEAD
     WHERE sku = in_sku;
+=======
+    WHERE product_id = in_productID;
+>>>>>>> 48b80ff145fcc329130d062042b4a857cbc35040
 
     UPDATE Products
     SET
@@ -174,7 +161,11 @@ BEGIN
         category = in_category,
         volume = in_volume,
         weight = in_weight
+<<<<<<< HEAD
     WHERE sku = in_sku;
+=======
+    WHERE product_id = in_productID;
+>>>>>>> 48b80ff145fcc329130d062042b4a857cbc35040
 
     UPDATE SalesProducts
     SET sku = in_sku
