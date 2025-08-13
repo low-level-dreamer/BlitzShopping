@@ -110,8 +110,8 @@ app.post('/Products/Add', async function (req, res) {
 app.post('/Products/Update', async function (req, res) {
     try {
         const data = req.body
-        const update_product = 'CALL update_product(?, ?, ?, ?, ?, ?, ?, ?);'
-        await db.query(update_product, [data.productID,
+        const update_product = 'CALL update_product(?, ?, ?, ?, ?, ?, ?);'
+        await db.query(update_product, [
                                         data.sku, 
                                         data.productName, 
                                         data.productDesc, 
@@ -125,3 +125,28 @@ app.post('/Products/Update', async function (req, res) {
       res.status(500).send('Update failed')
     }
 });
+
+app.get('/Products/Categories', async function (req, res) {
+  try {
+    const query = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'Products' AND COLUMN_NAME = 'Category';"
+    
+    let result = await db.execute(query);
+    result=result[0][0]["COLUMN_TYPE"]
+
+    console.log(result)
+    if (result) {
+      const enumValues = result
+        .match(/enum\((.*)\)/)[1]  // Extract content inside enum()
+        .split(',')                // Split by comma
+        .map(value => value.replace(/'/g, '').trim());
+        res.status(200).json(enumValues)
+    } else {
+      res.status(404).send('Category column not found');
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Failed to fetch categories');
+  }
+});
+
+

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css'
-import GetTable from './table';
+import {GetTable,GetProductTable} from './table';
 import {ResetDB,DeleteProduct,AddProduct} from './cud'
 const App = () => {
   const [currentPage, setCurrentPage] = useState('Home');
@@ -158,7 +158,7 @@ const App = () => {
         <button className="add-button" onClick={handleAddProduct}>Add</button>
       </div>
       <div>
-      <GetTable 
+      <GetProductTable 
         key={`products-table-${refreshTrigger}`}
         tableName="Products"
         headers={["sku","Product Name", "Product Description", "Price","Category","Volume", "Weight"]}
