@@ -1,5 +1,6 @@
 // Claude was used to debug the original code written by our team.
 
+//This file includes a react module that renders table from Blitz Shopping's database
 import React, { useState, useEffect } from 'react';
 import {ResetDB,DeleteProduct} from './cud'
 
@@ -13,11 +14,11 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
     
   }, []);
   const fetchProducts = async () => {
+    //Get products from API endpoint
+    //Format: json [[entry1],[entry2]]
     try {
       setLoading(true);
       setError(null);
-      
-      // Fixed: Added http:// protocol
       const response = await fetch(`http://classwork.engr.oregonstate.edu:${port}${apiEndpoint}?table=${tableName}`);
 
       if (!response.ok) {
@@ -39,13 +40,16 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
     newData[rowIndex][cellIndex] = value;
     setData(newData);
   };
+
   const updateProduct = async (rowIndex) => {
+    //Product update function
+    //Param: int, the row Number of target update 
     try {
       setLoading(true);
       setError(null);
 
       const row = data[rowIndex];
-      
+      //Gather updated data
       const updateData ={
       productID: row[0],
       sku: row[0],
@@ -56,21 +60,21 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
       volume: row[5],
       weight: row[6]
     };
+    //Send updated table to Update endpoint
+    const response = await fetch('http://classwork.engr.oregonstate.edu:9015/Products/Update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updateData)
+    });
 
-      const response = await fetch('http://classwork.engr.oregonstate.edu:9015/Products/Update', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updateData)
-      });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      alert('Product updated successfully!');
-      await fetchProducts(); // Refresh the table to get latest data
+    alert('Product updated successfully!');
+    await fetchProducts(); // Refresh the table to get latest data
       
     } catch (err) {
       setError(`Update failed: ${err.message}`);
@@ -79,12 +83,12 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
       setLoading(false);
     }
   };
-  // Handle loading state
+  // Handle loading
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  // Handle error state
+  // Handle error
   if (error) {
     return (
       <div>
@@ -97,7 +101,7 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
     );
   }
 
-  // Main render
+  // Main element
   return (
     <div>
       <h1>{tableName}</h1>
@@ -115,6 +119,7 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
             </tr>
           </thead>
           <tbody>
+            {/* Table constructor */}
             {data.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 {row.map((cell, cellIndex) => (
@@ -122,6 +127,7 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
                     key={cellIndex}
                     className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b"
                   >
+                    {/* All elements are displayed in input element now as default values */}
                     <input
                       type="text"
                       value={cell || ''}
@@ -138,6 +144,7 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
                   </td>
                 ))}
                 <td>
+                  {/* update and delete buttons */}
                   <div className="action-buttons">
                     <button 
                       className="update-button"
@@ -158,7 +165,7 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
           </tbody>
         </table>
       </div>
-     
+     {/* Refresh page button */}
       <button
         onClick={fetchProducts}
         className="update-button"
@@ -171,6 +178,7 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
 
 
 const GetProductTable = ({ tableName, headers,apiEndpoint, port }) => {
+  //Function specifically for product table to enable CUD for Products Table
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -215,6 +223,7 @@ const GetProductTable = ({ tableName, headers,apiEndpoint, port }) => {
     newData[rowIndex][cellIndex] = value;
     setData(newData);
   };
+  //Send updated table to Update endpoint
   const updateProduct = async (rowIndex) => {
     try {
       setLoading(true);
@@ -223,7 +232,7 @@ const GetProductTable = ({ tableName, headers,apiEndpoint, port }) => {
       const row = data[rowIndex];
       
       const updateData ={
-      productID: row[0],
+      //productID: row[0],
       sku: row[0],
       productName: row[1],
       productDesc: row[2],
@@ -255,12 +264,12 @@ const GetProductTable = ({ tableName, headers,apiEndpoint, port }) => {
       setLoading(false);
     }
   };
-  // Handle loading state
+  // Handle loading
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  // Handle error state
+  // Handle error
   if (error) {
     return (
       <div>
@@ -273,7 +282,7 @@ const GetProductTable = ({ tableName, headers,apiEndpoint, port }) => {
     );
   }
 
-  // Main render
+  // Main Element
   return (
     <div>
       <h1>{tableName}</h1>
@@ -298,7 +307,7 @@ const GetProductTable = ({ tableName, headers,apiEndpoint, port }) => {
                     key={cellIndex}
                   >
                     {cellIndex === 4 ? (
-                      // Fifth column (index 4) - Category dropdown
+                      // Fifth column: Category dropdown
                       <select
                         value={cell || ''}
                         onChange={(e) => handleCellChange(rowIndex, cellIndex, e.target.value)}
@@ -311,7 +320,7 @@ const GetProductTable = ({ tableName, headers,apiEndpoint, port }) => {
                         ))}
                       </select>
                     ) : (
-                      // All other columns - regular input
+                      // other columns:regular input
                       <input
                         type="text"
                         value={cell || ''}

@@ -38,9 +38,10 @@ const App = () => {
         volume: '',
         weight: ''
       });
-      setRefreshTrigger(prev => prev + 1)
+      setRefreshTrigger(prev => prev + 1) //Increment the table key triggers a refresh
     }
   };
+  //Navigation bar elements
   const renderNavigation = () => (
     <nav className="navigation">
       <div className="nav-container">
@@ -57,7 +58,7 @@ const App = () => {
     </nav>
   );
   
-
+  //Home page elements
   const renderHome = () => (
     <div className="home-container">
       <h1>Welcome to Blitz Shopping</h1>
@@ -70,7 +71,7 @@ const App = () => {
       </button>
     </div>
   );
-
+  //Add Customer form and Customer Table
   const renderCustomers = () => (
     <div className="page-container">
       <h2>Customers</h2>
@@ -95,7 +96,7 @@ const App = () => {
       </div>
     </div>
   );
-
+  //Add Products form and Products Table
   const renderProducts = () => (
     <div className="page-container">
       <h2>Products</h2>
@@ -160,6 +161,7 @@ const App = () => {
         <button className="add-button" onClick={handleAddProduct}>Add</button>
       </div>
       <div>
+      {/* Product table implementation with M:M deletion and Update */}
       <GetProductTable 
         key={`products-table-${refreshTrigger}`}
         tableName="Products"
@@ -170,7 +172,7 @@ const App = () => {
       </div>
     </div>
   );
-
+  //Add shipping method form and Logistics Table
   const renderLogistics = () => (
     <div className="page-container">
       <h2>Logistics</h2>
@@ -192,7 +194,7 @@ const App = () => {
       </div>
     </div>
   );
-
+  //Add Sales entry form and sales table
   const renderSales = () => (
     <div className="page-container">
       <h2>Sales</h2>
@@ -222,6 +224,7 @@ const App = () => {
       </div>
     </div>
   );
+// Add Sales Product form and SalesProduct Table
 const renderSalesProduct = () => (
     <div className="page-container">
       <h2>Sales Products</h2>
@@ -243,7 +246,8 @@ const renderSalesProduct = () => (
         headers={["Sales ID","SKU"]}
         apiEndpoint="/api/get"
         port={9015}/>
-      {/* <GetTable 
+      {/* The below was a more informative table, Saved for future use.
+      <GetTable 
         key="salesproduct-table"
         tableName="SalesProducts"
         headers={["Sales ID","Date of Sale","SKUs","Product Names","Courier Name","Total Price","Address", "Total Volume", "Total Weight"]}

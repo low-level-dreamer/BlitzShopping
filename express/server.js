@@ -19,7 +19,7 @@ const PORT = 9015;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
 });
-
+//Database connection test API
 app.get('/test-db', async (req, res) => {
   try {
     const [rows] = await db.execute('SELECT 1 as test');
@@ -136,7 +136,7 @@ app.get('/Products/Categories', async function (req, res) {
     console.log(result)
     if (result) {
       const enumValues = result
-        .match(/enum\((.*)\)/)[1]  // Extract content inside enum()
+        .match(/enum\((.*)\)/)[1]  // Extract content inside enum
         .split(',')                // Split by comma
         .map(value => value.replace(/'/g, '').trim());
         res.status(200).json(enumValues)

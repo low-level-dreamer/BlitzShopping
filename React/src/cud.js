@@ -1,9 +1,11 @@
 // Claude was used to debug the original code written by our team.
 
+//Below function performs DML operations including Reset database, Add, Update and Delete entries
 import React, { useState, useEffect } from 'react';
-
+//Reset DB function
 const ResetDB=async ()=>{
     try {
+      //Call refresh API endpoint
         const response = await fetch('http://classwork.engr.oregonstate.edu:9015/api/Refresh', {
         method: 'POST'
     });
@@ -11,13 +13,14 @@ const ResetDB=async ()=>{
     if (response.ok) {
       alert('Refresh successful')
       console.log('Refresh successful');
-      // Refresh your data here
     }
   } catch (error) {
     alert('Refresh failed:', error)
     console.error('Refresh failed:', error);
   }
 }
+
+//Delete product function
 const DeleteProduct=async (id)=>{
     try {
         const response = await fetch('http://classwork.engr.oregonstate.edu:9015/Products/Delete', {
@@ -39,6 +42,7 @@ const DeleteProduct=async (id)=>{
     console.error(`Delete failed ${id}:`, error);
   }
 }
+//Add product function
 const AddProduct = async (form) => {
   try {
     const response = await fetch('http://classwork.engr.oregonstate.edu:9015/Products/Add', {
