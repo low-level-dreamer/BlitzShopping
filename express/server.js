@@ -110,7 +110,7 @@ app.post('/Products/Add', async function (req, res) {
 app.post('/Products/Update', async function (req, res) {
     try {
         const data = req.body
-        const update_product = 'CALL update_product(?, ?, ?, ?, ?, ?, ?);'
+        const update_product = 'CALL update_product(?, ?, ?, ?, ?, ?, ?, ?);'
         await db.query(update_product, [
                                         data.sku, 
                                         data.productName, 
@@ -118,7 +118,8 @@ app.post('/Products/Update', async function (req, res) {
                                         data.price, 
                                         data.category, 
                                         data.volume, 
-                                        data.weight])
+                                        data.weight,
+                                        data.newSku])
         res.status(200).send('Update successful')
     } catch(err) {
       console.error(err)

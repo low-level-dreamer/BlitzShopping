@@ -183,6 +183,7 @@ const GetProductTable = ({ tableName, headers,apiEndpoint, port }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [originalSkus, setOriginalSkus] = useState([]);
   useEffect(() => {
     fetchProducts();
     fetchCategories();
@@ -211,7 +212,8 @@ const GetProductTable = ({ tableName, headers,apiEndpoint, port }) => {
      
       const jsonData = await response.json();
       setData(jsonData);
-      
+      const skus = jsonData.map(row => row[0]);
+      setOriginalSkus(skus);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -228,18 +230,19 @@ const GetProductTable = ({ tableName, headers,apiEndpoint, port }) => {
     try {
       setLoading(true);
       setError(null);
-
       const row = data[rowIndex];
+      const newSku = originalSkus[rowIndex]===row[0] ? null : row[0];
       
       const updateData ={
       //productID: row[0],
-      sku: row[0],
+      sku: originalSkus[rowIndex],
       productName: row[1],
       productDesc: row[2],
       price: row[3],
       category: row[4],
       volume: row[5],
-      weight: row[6]
+      weight: row[6],
+      newSku:newSku
     };
 
       const response = await fetch('http://classwork.engr.oregonstate.edu:9015/Products/Update', {
@@ -325,7 +328,6 @@ const GetProductTable = ({ tableName, headers,apiEndpoint, port }) => {
                         type="text"
                         value={cell || ''}
                         onChange={(e) => handleCellChange(rowIndex, cellIndex, e.target.value)}
-                        readOnly={cellIndex === 0}
                       />
                     )}
                   </td>

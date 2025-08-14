@@ -128,7 +128,7 @@ DELIMITER ;
 
 DELIMITER //
 
--- Procedure for updating product as well as the intersection table
+
 DROP PROCEDURE IF EXISTS update_product;
 
 CREATE PROCEDURE update_product(
@@ -140,38 +140,46 @@ CREATE PROCEDURE update_product(
     IN in_volume DECIMAL(18, 3),
     IN in_weight DECIMAL(18, 3)
 )
-BEGIN
-    DECLARE old_sku VARCHAR(45);
-    START TRANSACTION;
-    -- Hold the current sku value in a separate variable
-    SELECT sku INTO old_sku
-    FROM Products
-<<<<<<< HEAD
-    WHERE sku = in_sku;
-=======
-    WHERE product_id = in_productID;
->>>>>>> 48b80ff145fcc329130d062042b4a857cbc35040
 
+DROP PROCEDURE IF EXISTS update_product;
+-- Procedure for updating product as well as the intersection table
+DELIMITER //
+CREATE PROCEDURE update_product(
+    IN old_sku VARCHAR(45),
+    IN in_productName VARCHAR(45),
+    IN in_productDesc VARCHAR(300),
+    IN in_price DECIMAL(18,2),
+    IN in_category ENUM('Clothing','Electronics','Accesories','Software'),
+    IN in_volume DECIMAL(18,3),
+    IN in_weight DECIMAL(18,3),
+    IN new_sku VARCHAR(45) -- Can be NULL for keeping the same sku
+)
+BEGIN
+    DECLARE sku_update VARCHAR(45);
+    
+    START TRANSACTION;
+     SET FOREIGN_KEY_CHECKS = 0;
+    -- If new_sku is NULL, use the old_sku 
+    SET sku_update = IFNULL(new_sku, old_sku);
+    
+    -- Update SKU if changed
+    IF sku_update != old_sku THEN
+        UPDATE SalesProducts SET sku = sku_update
+        WHERE sku = old_sku;
+    END IF;
+    
+    -- Update the Products table
     UPDATE Products
     SET
-        sku = in_sku,
+        sku = sku_update,
         productName = in_productName,
         productDesc = in_productDesc,
         price = in_price,
         category = in_category,
         volume = in_volume,
         weight = in_weight
-<<<<<<< HEAD
-    WHERE sku = in_sku;
-=======
-    WHERE product_id = in_productID;
->>>>>>> 48b80ff145fcc329130d062042b4a857cbc35040
-
-    UPDATE SalesProducts
-    SET sku = in_sku
     WHERE sku = old_sku;
-
+    SET FOREIGN_KEY_CHECKS = 1;
     COMMIT;
 END //
-
 DELIMITER ;
