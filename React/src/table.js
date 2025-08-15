@@ -115,7 +115,7 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
                   {header}
                 </th>
               ))}
-              <th>Actions</th>
+              {/* <th>Actions</th> */}
             </tr>
           </thead>
           <tbody>
@@ -143,9 +143,10 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
                     />
                   </td>
                 ))}
-                <td>
+                
                   {/* update and delete buttons */}
-                  <div className="action-buttons">
+                  {/*<td>
+                    <div className="action-buttons">
                     <button 
                       className="update-button"
                       onClick={() => updateProduct(rowIndex)}
@@ -158,8 +159,10 @@ const GetTable = ({ tableName, headers,apiEndpoint, port }) => {
                     >
                       Delete
                     </button>
-                  </div>
-                </td>
+                    </div>
+                    </td>
+                    */}
+                
               </tr>
             ))}
           </tbody>

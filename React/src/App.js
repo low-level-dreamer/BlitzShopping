@@ -76,14 +76,14 @@ const App = () => {
     <div className="page-container">
       <h2>Customers</h2>
       
-      <div className="form-container">
+      {/* <div className="form-container">
         <input type="text" placeholder="First Name" className="form-input" />
         <input type="text" placeholder="Last Name" className="form-input" />
         <input type="text" placeholder="Phone" className="form-input" />
         <input type="email" placeholder="Email" className="form-input" />
         <input type="text" placeholder="Card Number" className="form-input" />
         <button className="add-button">Add</button>
-      </div>
+      </div> */}
 
       <div>
       <GetTable 
@@ -177,11 +177,11 @@ const App = () => {
     <div className="page-container">
       <h2>Logistics</h2>
       
-      <div className="form-container">
+      {/* <div className="form-container">
         <input type="text" placeholder="Courier Name" className="form-input" />
         <input type="number" placeholder="Shipping Time (days)" className="form-input" />
         <button className="add-button">Add</button>
-      </div>
+      </div> */}
 
       <div>
       <GetTable 
@@ -199,7 +199,7 @@ const App = () => {
     <div className="page-container">
       <h2>Sales</h2>
       
-      <div className="form-container">
+      {/* <div className="form-container">
         <input type="number" placeholder="Customer ID" className="form-input" />
         <input type="text" placeholder="Address" className="form-input" />
         <input type="text" placeholder="Country" className="form-input" />
@@ -211,7 +211,7 @@ const App = () => {
           <option>Canceled</option>
         </select>
         <button className="add-button">Add</button>
-      </div>
+      </div> */}
 
       <div>
       <GetTable 
@@ -229,7 +229,7 @@ const renderSalesProduct = () => (
     <div className="page-container">
       <h2>Sales Products</h2>
       
-      <div className="form-container">
+      {/* <div className="form-container">
         <input type="number" placeholder="Sales ID" className="form-input" />
         <input type="text" placeholder="SKU" className="form-input" />
         <select className="form-select">
@@ -237,7 +237,7 @@ const renderSalesProduct = () => (
           <option>Customer ID</option>
         </select>
         <button className="add-button">Add</button>
-      </div>
+      </div> */}
 
       <div>
         <GetTable 
